@@ -1,0 +1,27 @@
+{
+	"server":{
+		"className":"org.async.net.Server",
+		"timeout":1000,
+		"bind":{
+			"0.0.0.0:8080":"$.channelProcessor"
+		}
+
+	},
+	"channelProcessor":{
+		"className":"org.async.web.http.core.HTTPChannelProcessor",
+		"callback":"$.httpCallback", "sendBufferSize":65536, "recvBufferSize":65536,
+	    "httpRequestProcessor":"$.requestProcessor", "soTimeout":30000},
+
+	"requestProcessor":{"className":"org.async.web.http.core.HTTPRequestProcessor"},
+	"httpCallback":{"className":"org.async.web.http.core.HTTPCallback","dispatchers":[ "$.staticDispatcher"]},
+	"staticDispatcher":
+	{
+		"className":"org.async.web.http.servlet.impl.StaticURIDispatcher",
+		"documentRoot":"",
+		"mimeTypes":"$.mimeTypes",
+		"autoIndex":true
+	},
+
+	"mimeTypes":"#include(mime-types.conf.json)",
+}
+
