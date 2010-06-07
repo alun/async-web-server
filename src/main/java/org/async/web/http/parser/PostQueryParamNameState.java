@@ -19,7 +19,7 @@ public class PostQueryParamNameState implements State {
 				if (tail[0] == '=') {
 					callback.queryParamName(builder.toString());
 					builder.reset();
-					return ((RootParser.POST_QUERY_PARAM_VALUE&0xFFFF)+(innerState<<16));
+					return RootParser.POST_QUERY_PARAM_VALUE+(innerState<<8);
 				} else {
 					if (tail[0] != '&') {
 						builder.append(tail[0]);
@@ -38,7 +38,7 @@ public class PostQueryParamNameState implements State {
 				throw new IllegalArgumentException();
 			}
 		}
-		return RootParser.RESUME+(innerState<<16);
+		return RootParser.RESUME+(innerState<<8);
 
 	}
 

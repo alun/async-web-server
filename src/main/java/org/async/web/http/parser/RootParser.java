@@ -6,8 +6,8 @@ import java.io.Reader;
 
 public class RootParser {
 
-	protected static final int RESUME = 0xFFFF;
-	public static final int PARSED = 0xEEEE;
+	protected static final int RESUME = 0xFF;
+	public static final int PARSED = 0xEE;
 	protected static final int METHOD = 0;
 	protected static final int URI = 1;
 	protected static final int PROTOCOL_VERSION = 2;
@@ -29,19 +29,19 @@ public class RootParser {
 	public int parse(Reader reader, char[] tail, int stateIdx,
 			CharArrayWriter builder, Callback callback) {
 		while (true) {
-			int innerState = stateIdx>>>16;
-			State state = states[stateIdx & 0xFFFF];
+			int innerState = stateIdx>>>8;
+			State state = states[stateIdx&0xFF];
 			try {
 				int next = callback.filter(state.run(reader, tail, builder,
 						callback, innerState));
-				innerState = next>>>16;
-				next = next & 0xFFFF;
+				innerState = next>>>8;
+				next = next&0xFF;
 				if (next == RESUME) {
-					return (stateIdx&0xFFFF)+(innerState<<16);
+					return (stateIdx&0xFF)+(innerState<<8);
 				} else if (next == PARSED) {
 					return PARSED;
 				} else {
-					stateIdx = next+(innerState<<16);
+					stateIdx = next+(innerState<<8);
 				}
 			} catch (Exception e) {
 				callback.error(e);

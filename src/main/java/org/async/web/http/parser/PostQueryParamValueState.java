@@ -19,7 +19,7 @@ public class PostQueryParamValueState implements State {
 				if (tail[0] == '&') {
 					callback.queryParamValue(builder.toString());
 					builder.reset();
-					return ((RootParser.POST_QUERY_PARAM_NAME&0xFFFF)+(innerState<<16));
+					return RootParser.POST_QUERY_PARAM_NAME+(innerState<<8);
 				} else {
 					builder.append(tail[0]);
 					if (innerState == 0){
@@ -37,7 +37,7 @@ public class PostQueryParamValueState implements State {
 				throw new IllegalArgumentException();
 			}
 		}
-		return RootParser.RESUME+(innerState<<16);
+		return RootParser.RESUME+(innerState<<8);
 	}
 
 	@Override

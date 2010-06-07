@@ -134,8 +134,10 @@ public class HTTPCallback implements Callback {
 			String contentLength = data.headers.get("Content-Length");
 			if (contentLength != null) {
 				data.setPostParsed(true);
-				return ((RootParser.POST_QUERY_PARAM_NAME & 0xFFFF) + (Integer
-						.parseInt(contentLength) << 16));
+				int len = Integer.parseInt(contentLength);
+				if (len > 0xFFFFFF)
+					throw new IllegalArgumentException();
+				return RootParser.POST_QUERY_PARAM_NAME+(len<<8);
 			}
 		} else if(value == RootParser.PARSED) {
 			if (accessLogger.isLoggable(Level.FINEST)) {
