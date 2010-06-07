@@ -1,0 +1,7 @@
+*.swp
+*~
+target
+settings.xml
+nbactions.xml
+*.log
+*.log.*
