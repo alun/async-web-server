@@ -31,6 +31,16 @@ public class MemorySessionManager implements SessionManager {
 		return s;
 	}
 
+	public Session startSession(String sid) {
+		Session s = new Session();
+		s.setSid(sid);
+		s.setLifetime(sessionLifeTime);
+		s.setExpire(System.currentTimeMillis() + sessionLifeTime);
+		s.setPath("/");
+		sessions.put(s.getSid(), s);
+		return s;
+	}
+
 	@Override
 	public void endSession(String sid) {
 		sessions.remove(sid);

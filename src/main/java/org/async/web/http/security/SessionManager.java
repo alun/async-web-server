@@ -6,6 +6,8 @@ public interface SessionManager {
 
 	public Session startSession();
 
+	public Session startSession(String sid);
+
 	public void endSession(String sid);
 
 	public void expire();
