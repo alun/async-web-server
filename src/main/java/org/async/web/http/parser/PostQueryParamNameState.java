@@ -6,7 +6,6 @@ import java.io.Reader;
 public class PostQueryParamNameState implements State {
 
 	protected int innerState;
-	private static int MAX_CONTENT_LENGTH = 65535;
 
 	@Override
 	public int run(Reader reader, char[] tail, CharArrayWriter builder,
@@ -19,18 +18,17 @@ public class PostQueryParamNameState implements State {
 				if (tail[0] == '=') {
 					callback.queryParamName(builder.toString());
 					builder.reset();
-					return RootParser.POST_QUERY_PARAM_VALUE+(innerState<<8);
+ 					if (innerState == 0)
+						return RootParser.PARSED;
+ 					else
+						return RootParser.POST_QUERY_PARAM_VALUE+(innerState<<8);
 				} else {
-					if (tail[0] != '&') {
+					if (tail[0] != '&')
 						builder.append(tail[0]);
-						if (innerState == 0 ){
-							callback.queryParamName(builder.toString());
-							builder.reset();
-							return RootParser.PARSED;
-						}
-						if (builder.size() > MAX_CONTENT_LENGTH ) {
-							throw new IllegalArgumentException();
-						}
+					if (innerState == 0 ) {
+						callback.queryParamName(builder.toString());
+						builder.reset();
+						return RootParser.PARSED;
 					}
 				}
 			} else {
