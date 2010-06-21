@@ -65,9 +65,14 @@ public class Request {
 		if (cookie != null) {
 			int i = cookie.indexOf(name);
 			if (i > 0) {
-				String prev = cookie.substring(i - 1, i);
-				if (!prev.equals(";")) {
-					return null;
+				for (int j = i - 1; j >= 0; j--) {
+					char c = cookie.charAt(j);
+					if (!Character.isWhitespace(c)) {
+						if (c == ';')
+							break;
+						else
+							return null;
+					}
 				}
 			}
 			i = i + name.length() + 1;
